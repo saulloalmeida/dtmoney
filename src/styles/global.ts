@@ -2,13 +2,14 @@ import {createGlobalStyle} from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
     :root{
-        --background:#f0f2f5;
+        --background:#e8e9ed; //f0f2f9
         --red:#e52e4d;
+        --green:#33cc95;
         --blue:#5429cc;
         --blue-light:#6933ff;
         --text-title:#363f5f;
         --text-body:#969cb3;
-        --shape:#ffffff;
+        --shape:#FFFFFF;
     }
     *{
         margin: 0;
@@ -24,7 +25,7 @@ export const GlobalStyle = createGlobalStyle`
         }
     }
     body{
-        background: --background;
+        background: var(--background);
     }
     body, input, textarea, button{
         font-family: 'Poppins', sans-serif;
