@@ -4,26 +4,30 @@ import closeImg from '../../assets/close.svg'
 import incomeImg from '../../assets/income.svg'
 import outcomeImg from '../../assets/outcome.svg'
 import { FormEvent, useState } from 'react'
-import { api } from '../../services/api'
+import { useTransactions } from '../../hooks/useTransactions'
 interface NewTransactionModalProps {
     isOpen: boolean
     onRequestClose: () => void
 }
 export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionModalProps) {
+    const {createTransaction} = useTransactions()
     const [type, setType] = useState('deposit')
     const [title, setTitle] = useState('')
     const [category, setCategory] = useState('')
-    const [value, setValue] = useState(0)
-    function handleCreateNewTransaction(event: FormEvent) {
+    const [amount, setAmount] = useState(0)
+    async function handleCreateNewTransaction(event: FormEvent) {
         event.preventDefault()
-        const data =
-            {
-                title,
-                category,
-                value,
-                type
-            }
-        api.post('/transactions', data)
+        await createTransaction({
+            title,
+            amount,
+            type,
+            category
+        })
+        setType('deposit')
+        setTitle('')
+        setCategory('')
+        setAmount(0)
+        onRequestClose();
     }
     return (
         <Modal
@@ -40,7 +44,7 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
             <Container onSubmit={handleCreateNewTransaction}>
                 <h2>Nova Transação</h2>
                 <input type="text" placeholder="Titulo" value={title} onChange={event => setTitle(event.target.value)} />
-                <input type="number" placeholder="Valor" value={value} onChange={event => setValue(Number(event.target.value))} />
+                <input type="number" placeholder="Valor" value={amount} onChange={event => setAmount(Number(event.target.value))} />
                 <TransactionTypeContainer>
                     <RadioBox
                         onClick={() => setType('deposit')}
